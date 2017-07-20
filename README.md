@@ -22,7 +22,7 @@ crontab -e
 ```
 ./pyGIwriteFile.py &
 ```
-5. Edit aprs_radiation.sh to your own specifications
+5. Edit aprs_radiation.sh to your own specifications.
 Run it every 3 minutes with crontab. Don't set it to 1 minute because APRS network will consider it as spam and your IP will get blocked.
 ```
 crontab -e
