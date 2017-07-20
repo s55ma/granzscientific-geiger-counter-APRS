@@ -30,7 +30,7 @@ crontab -e
 ```
 ![alt text](https://i.imgur.com/05xyMjX.png)
 
-6. This is optionally, non APRS related. You can install Munin monitoring tool and install radiation plugin. It will plot daily, weekly, monthly and yearly graphs of the radiation. Installation and configuration of the Munin is beyond this project. Get the plugin:
+6. This is optionally, non APRS related. You can install Munin monitoring tool and install radiation plugin. It will plot daily, weekly, monthly and yearly graphs of the radiation. Installation and configuration of the Munin is beyond the scope of this project. Get the plugin:
 
 ```
 cd /etc/munin/plugins/
