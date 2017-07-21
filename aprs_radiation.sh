@@ -84,13 +84,38 @@ t3="$user>APRS,TCPIP*::$user :UNIT.uSv/h"
 t4="$user>APRS,TCPIP*::$user :EQNS.0,0.001,0,0,0,0,0,0,0,0,0,0,0,0,0"
 t5="$user>APRS,TCPIP*::$user :BITS.00000000,APRS Geiger Counter"
 
-#Send data to the APRS server.
+##############################################
+######## Send data to the APRS server.########
+##############################################
+
+#Check if file exist
+if [ ! -f "/mnt/ramdisk/date.txt" ]; then
+   echo 0 > /mnt/ramdisk/date.txt
+fi
+
+#calculate time difference
+read olddate < /mnt/ramdisk/date.txt
+date="$(date +%s)"
+diff="$(echo "$date - $olddate" | bc)"
+
+
 #Use this if this is your primary station.
-#printf "%s\n" "$aprsauth" "wx" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port
+#Send PARAMS, UNITS, EQNS and BITS every 2 hours, this is separate from the actual radiation value.
+#if [ "$diff" -gt 7200 ]; then
+#   printf "%s\n" "$aprsauth" "wx" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port
+#     else
+#   printf "%s\n" "$aprsauth" "$t1" | ncat --send-only $server $port
+#fi
 
 #Use this if you're sending extra data to your existing station, wx is removed.
 #only telemtry is being sent.
-printf "%s\n" "$aprsauth" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port
+#Send PARAMS, UNITS, EQNS and BITS every 2 hours, this is separate from the actual radiation value.
+
+if [ "$diff" -gt 7200 ]; then
+   printf "%s\n" "$aprsauth" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port
+     else
+   printf "%s\n" "$aprsauth" "$t1" | ncat --send-only $server $port
+fi
 
 #Output control, uncomment for debugging
 #printf "%s\n" "$aprsauth" "$wx" "$t1" "$t2" "$t3" "$t4" "$t5"
@@ -99,4 +124,5 @@ printf "%s\n" "$aprsauth" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $serv
 
 #Write the last sequence number.
 echo "$num" > /mnt/ramdisk/sequence_number.txt
-
+#Write the last date
+echo "$date" > /mnt/ramdisk/date.txt
