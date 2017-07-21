@@ -102,7 +102,7 @@ diff="$(echo "$date - $olddate" | bc)"
 #Use this if this is your primary station.
 #Send PARAMS, UNITS, EQNS and BITS every 2 hours, this is separate from the actual radiation value.
 #if [ "$diff" -gt 7200 ]; then
-#   printf "%s\n" "$aprsauth" "wx" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port
+#   printf "%s\n" "$aprsauth" "wx" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port; echo "$date" > /mnt/ramdisk/date.txt
 #     else
 #   printf "%s\n" "$aprsauth" "$t1" | ncat --send-only $server $port
 #fi
@@ -112,7 +112,7 @@ diff="$(echo "$date - $olddate" | bc)"
 #Send PARAMS, UNITS, EQNS and BITS every 2 hours, this is separate from the actual radiation value.
 
 if [ "$diff" -gt 7200 ]; then
-   printf "%s\n" "$aprsauth" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port
+   printf "%s\n" "$aprsauth" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port; echo "$date" > /mnt/ramdisk/date.txt
      else
    printf "%s\n" "$aprsauth" "$t1" | ncat --send-only $server $port
 fi
@@ -126,6 +126,6 @@ fi
 echo "$num" > /mnt/ramdisk/sequence_number.txt
 
 #Write the last date
-if [ "$diff" -gt 7200 ]; then
-    echo "$date" > /mnt/ramdisk/date.txt
-fi
+#if [ "$diff" -gt 7200 ]; then
+#    echo "$date" > /mnt/ramdisk/date.txt
+#fi
