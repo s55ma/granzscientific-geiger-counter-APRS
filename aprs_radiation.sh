@@ -76,7 +76,7 @@ wxs="$user>APRS,TCPIP*:=$lat/$lon"247/002g...t082r000P000p000h36b09354Digi-iGate
 
 #Telemetry data, more info at http://www.aprs.net/vm/DOS/TELEMTRY.HTM
 #Value is in nSv, since the format support is from 0-999 you can't use floating point values.
-t1="$user>APRS,TCPIP*:T#$num,$nSv,000,000,000,000,00000000"
+printf -v t1 "%s>APRS,TCPIP*:T#%03d,$nSv,000,000,000,000,00000000" "$user" "$num"
 t2="$user>APRS,TCPIP*::$user :PARM.Radiation"
 t3="$user>APRS,TCPIP*::$user :UNIT.uSv/h"
 
