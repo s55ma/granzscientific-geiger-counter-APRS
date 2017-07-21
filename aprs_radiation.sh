@@ -124,5 +124,8 @@ fi
 
 #Write the last sequence number.
 echo "$num" > /mnt/ramdisk/sequence_number.txt
+
 #Write the last date
-echo "$date" > /mnt/ramdisk/date.txt
+if [ "$diff" -gt 7200 ]; then
+    echo "$date" > /mnt/ramdisk/date.txt
+fi
