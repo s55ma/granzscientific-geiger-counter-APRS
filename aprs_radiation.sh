@@ -5,7 +5,7 @@
 #Ncat is a part of the nmap, install nmap to use ncat.
 #You also need bc tool for calculations.
 
-#Create a temporary RAM disk (we don't want to write on a SD card to often).
+#Create a temporary RAM disk (we don't want to write on a SD card too often).
 #You need to run this script as sudo (root) or create a temporary ramdisk at boot as root
 #and run this script as a normal user.
 if [ ! -d "/mnt/ramdisk/" ]; then
@@ -64,24 +64,24 @@ uSv="$(echo "$CPM * 0.00233" | bc | awk '{printf "%.3f", $0}')"
 uR="$(echo "$uSv * 100" | bc)"
 
 #Generate authentication data.
-aprsauth="user $user pass $password filter m/50"
+aprsauth="user $user pass $password"
 
 #Generate Weather string, required string if this is your only station. It has an empty weather data values but
 #it's needed to generate the station on the APRS network.
-wx="$user>APX206,TCPIP*:!$lat/$lon.../...g...t... /Digi-iGate Geiger counter"
+wx="$user>APRS,TCPIP*:!$lat/$lon.../...g...t... /Digi-iGate Geiger counter"
 
 #Weather data string example. This is how a non empty weather data should look like. You don't need this.
-wxs="$user>APX206,TCPIP*:=$lat/$lon"247/002g...t082r000P000p000h36b09354Digi-iGate-APRS-Geiger-counter""
+wxs="$user>APRS,TCPIP*:=$lat/$lon"247/002g...t082r000P000p000h36b09354Digi-iGate-APRS-Geiger-counter""
 
 #Telemetry data, more info at http://www.aprs.net/vm/DOS/TELEMTRY.HTM
 #Value is in nSv, since the format support is from 0-999 you can't use floating point values.
-t1="$user>APX206,TCPIP*:T#$num,$nSv,000,000,000,000,00000000"
-t2="$user>APX206,TCPIP*::$user :PARM.Radiation"
-t3="$user>APX206,TCPIP*::$user :UNIT.uSv/h"
+t1="$user>APRS,TCPIP*:T#$num,$nSv,000,000,000,000,00000000"
+t2="$user>APRS,TCPIP*::$user :PARM.Radiation"
+t3="$user>APRS,TCPIP*::$user :UNIT.uSv/h"
 
 #Add coeficient in EQNS field to convert to uSv 0.001.
-t4="$user>APX206,TCPIP*::$user :EQNS.0,0.001,0,0,0,0,0,0,0,0,0,0,0,0,0"
-t5="$user>APX206,TCPIP*::$user :BITS.00000000,APRS Geiger Counter"
+t4="$user>APRS,TCPIP*::$user :EQNS.0,0.001,0,0,0,0,0,0,0,0,0,0,0,0,0"
+t5="$user>APRS,TCPIP*::$user :BITS.00000000,APRS Geiger Counter"
 
 #Send data to the APRS server.
 #Use this if this is your primary station.
