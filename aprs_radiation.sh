@@ -69,20 +69,20 @@ aprsauth="user $user pass $password"
 
 #Generate Weather string, required string if this is your only station. It has an empty weather data values but
 #it's needed to generate the station on the APRS network.
-wx="$user>APRS,TCPIP*:!$lat/$lon.../...g...t... /Digi-iGate Geiger counter"
+wx="$user>APN001,TCPIP*:!$lat/$lon.../...g...t... /Digi-iGate Geiger counter"
 
 #Weather data string example. This is how a non empty weather data should look like. You don't need this.
-wxs="$user>APRS,TCPIP*:=$lat/$lon"247/002g...t082r000P000p000h36b09354Digi-iGate-APRS-Geiger-counter""
+wxs="$user>APN001,TCPIP*:=$lat/$lon"247/002g...t082r000P000p000h36b09354Digi-iGate-APRS-Geiger-counter""
 
 #Telemetry data, more info at http://www.aprs.net/vm/DOS/TELEMTRY.HTM
 #Value is in nSv, since the format support is from 0-999 you can't use floating point values.
-printf -v t1 "%s>APRS,TCPIP*:T#%03d,$nSv,000,000,000,000,00000000" "$user" "$num"
-t2="$user>APRS,TCPIP*::$user :PARM.Radiation"
-t3="$user>APRS,TCPIP*::$user :UNIT.uSv/h"
+printf -v t1 "%s>APN001,TCPIP*:T#%03d,$nSv,000,000,000,000,00000000" "$user" "$num"
+t2="$user>APN001,TCPIP*::$user :PARM.Radiation"
+t3="$user>APN001,TCPIP*::$user :UNIT.uSv/h"
 
 #Add coeficient in EQNS field to convert to uSv 0.001.
-t4="$user>APRS,TCPIP*::$user :EQNS.0,0.001,0,0,0,0,0,0,0,0,0,0,0,0,0"
-t5="$user>APRS,TCPIP*::$user :BITS.00000000,APRS Geiger Counter"
+t4="$user>APN001,TCPIP*::$user :EQNS.0,0.001,0,0,0,0,0,0,0,0,0,0,0,0,0"
+t5="$user>APN001,TCPIP*::$user :BITS.00000000,APRS Geiger Counter"
 
 ##############################################
 ######## Send data to the APRS server.########
