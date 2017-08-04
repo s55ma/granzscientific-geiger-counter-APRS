@@ -69,7 +69,7 @@ aprsauth="user $user pass $password"
 
 #Generate Weather string, required string if this is your only station. It has an empty weather data values but
 #it's needed to generate the station on the APRS network.
-wx="$user>APN001,TCPIP*:!$lat/$lon.../...g...t... /Digi-iGate Geiger counter"
+wx="$user>APN001,TCPIP*:!$lat/$lon.../...g...t...Digi-iGate Geiger counter"
 
 #Weather data string example. This is how a non empty weather data should look like. You don't need this.
 wxs="$user>APN001,TCPIP*:=$lat/$lon"247/002g...t082r000P000p000h36b09354Digi-iGate-APRS-Geiger-counter""
@@ -83,6 +83,19 @@ t3="$user>APN001,TCPIP*::$user :UNIT.uSv/h"
 #Add coeficient in EQNS field to convert to uSv 0.001.
 t4="$user>APN001,TCPIP*::$user :EQNS.0,0.001,0,0,0,0,0,0,0,0,0,0,0,0,0"
 t5="$user>APN001,TCPIP*::$user :BITS.00000000,APRS Geiger Counter"
+
+#Radioactivity level status message
+if [ "$nSv" -le 150 ]; then
+   radlevel="normal"
+elif [[ "$nSv" -gt 150 ]] && [[ "$nSv" -le 200 ]]; then
+   radlevel="elevated"
+elif [ "$nSv" -gt 200 ]; then
+   radlevel="critical"
+fi
+
+statusmessage="Radioactivity level: $radlevel"
+status="$user>APN001,TCPIP*:>$statusmessage"
+
 
 ##############################################
 ######## Send data to the APRS server.########
@@ -112,9 +125,9 @@ diff="$(echo "$date - $olddate" | bc)"
 #Send PARAMS, UNITS, EQNS and BITS every 2 hours, this is separate from the actual radiation value.
 
 if [ "$diff" -gt 7200 ]; then
-   printf "%s\n" "$aprsauth" "$t1" "$t2" "$t3" "$t4" "$t5" | ncat --send-only $server $port; echo "$date" > /mnt/ramdisk/date.txt
+   printf "%s\n" "$aprsauth" "$t1" "$t2" "$t3" "$t4" "$t5" "$status" "$wx" | ncat --send-only $server $port; echo "$date" > /mnt/ramdisk/date.txt
      else
-   printf "%s\n" "$aprsauth" "$t1" | ncat --send-only $server $port
+   printf "%s\n" "$aprsauth" "$t1" "$status" | ncat --send-only $server $port
 fi
 
 #Output control, uncomment for debugging
